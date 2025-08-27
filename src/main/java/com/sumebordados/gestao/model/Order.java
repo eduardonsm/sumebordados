@@ -1,10 +1,17 @@
 package com.sumebordados.gestao.model;
 import com.sumebordados.gestao.model.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ORDERS")
 @Entity(name = "ORDERS")
 public class Order {
@@ -28,4 +35,11 @@ public class Order {
     @Column(columnDefinition = "order_type")
     private OrderStatus status;
     private String artwork_url;
+    @ElementCollection
+    @CollectionTable(
+            name = "ORDER_COLORS", // Nome da tabela que armazenará a coleção
+            joinColumns = @JoinColumn(name = "order_id") // Coluna que faz a ligação com a tabela ORDERS
+    )
+    @Column(name = "color", nullable = false) // Nome da coluna que armazenará as cores
+    private Set<String> colors = new HashSet<>();
 }
