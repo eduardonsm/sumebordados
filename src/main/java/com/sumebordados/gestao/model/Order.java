@@ -41,5 +41,13 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id") // Coluna que faz a ligação com a tabela ORDERS
     )
     @Column(name = "color", nullable = false) // Nome da coluna que armazenará as cores
-    private Set<String> colors = new HashSet<>();
+    private Set<String> colors = new HashSet<>(); // Não permite cor duplicada
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL
+    )
+    private Set<OrderSize> sizes = new HashSet<>();
+
+
 }
