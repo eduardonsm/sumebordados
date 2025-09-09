@@ -1,9 +1,8 @@
 package com.sumebordados.gestao.model;
-import com.sumebordados.gestao.model.OrderSizeId;
-import com.sumebordados.gestao.model.Order;
 import com.sumebordados.gestao.model.enums.BaseSizeType;
 import com.sumebordados.gestao.model.enums.VariantType;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "ORDER_SIZES")
