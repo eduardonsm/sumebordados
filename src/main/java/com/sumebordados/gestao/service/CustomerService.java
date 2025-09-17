@@ -6,17 +6,16 @@ import com.sumebordados.gestao.dto.customer.DeleteCustomerResponseDTO;
 import com.sumebordados.gestao.exception.CustomerNotFoundException;
 import com.sumebordados.gestao.model.Customer;
 import com.sumebordados.gestao.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class CustomerService {
 
     private final CustomerRepository customerRepo;
 
-    public CustomerService(CustomerRepository customerRepo) {
-        this.customerRepo = customerRepo;
-    }
     @Transactional
     public CustomerResponseDTO createCustomer(CustomerRequestDTO dto){
 

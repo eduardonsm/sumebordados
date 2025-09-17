@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.management.ConstructorParameters;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +16,32 @@ import java.util.Set;
 @Table(name = "ORDERS")
 @Entity(name = "ORDERS")
 public class Order {
+
+    public Order(Customer customer, String model, String fabric, boolean has_cut, Integer quantity, Integer chest_customization, Integer back_customization, Integer sleeve_customization, Float unit_price, Float total_price, LocalDate delivery_date, LocalDate advance_date, Float advance_amount, Float remaining_amount, OrderStatus status, String artwork_url, Set<String> colors) {
+        this.customer = customer;
+        this.model = model;
+        this.fabric = fabric;
+        this.has_cut = has_cut;
+        this.quantity = quantity;
+        this.chest_customization = chest_customization;
+        this.back_customization = back_customization;
+        this.sleeve_customization = sleeve_customization;
+        this.unit_price = unit_price;
+        this.total_price = total_price;
+        this.delivery_date = delivery_date;
+        this.advance_date = advance_date;
+        this.advance_amount = advance_amount;
+        this.remaining_amount = remaining_amount;
+        this.status = status;
+        this.artwork_url = artwork_url;
+        this.colors = colors;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Integer customer_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
     private String model;
     private String fabric;
     private boolean has_cut;

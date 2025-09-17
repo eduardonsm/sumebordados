@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity(name = "CUSTOMERS")
 @Table(name = "CUSTOMERS")
@@ -25,4 +28,6 @@ public class Customer {
     private String telefone;
     @Column(nullable = false)
     private String endereco;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Order> orders = new HashSet<>();
 }
