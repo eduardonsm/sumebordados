@@ -22,5 +22,6 @@ public record CreateOrderRequestDTO(
         Float remaining_amount,
         OrderStatus status,
         String artwork_url,
-        Set<String> colors
+        Set<String> colors,
+        Set<OrderSizeRequestDTO> sizes
 ) {}
