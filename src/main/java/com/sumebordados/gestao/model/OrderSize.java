@@ -2,10 +2,15 @@ package com.sumebordados.gestao.model;
 import com.sumebordados.gestao.model.enums.BaseSizeType;
 import com.sumebordados.gestao.model.enums.VariantType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "ORDER_SIZES")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderSize {
     @EmbeddedId
     private OrderSizeId id;

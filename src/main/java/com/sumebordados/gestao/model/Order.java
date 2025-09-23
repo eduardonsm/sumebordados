@@ -69,7 +69,8 @@ public class Order {
 
     @OneToMany(
             mappedBy = "order",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<OrderSize> sizes = new HashSet<>();
 

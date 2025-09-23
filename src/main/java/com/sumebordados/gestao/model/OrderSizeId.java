@@ -18,6 +18,11 @@ import java.io.Serializable;
 
 @Embeddable
 public class OrderSizeId implements Serializable {
+
+    public OrderSizeId(BaseSizeType base_size, VariantType variant) {
+        this.base_size = base_size;
+        this.variant = variant;
+    }
     @Column(name = "order_id")
     private Long order_id;
 
