@@ -27,4 +27,10 @@ public class Employee {
     @Column(nullable = false)
     private EmployeeRole role;
 
+    public Employee(String nome, String username, String senha, EmployeeRole role) {
+        this.nome = nome;
+        this.username = username;
+        this.senha = senha;
+        this.role = role;
+    }
 }
