@@ -4,6 +4,7 @@ import com.sumebordados.gestao.model.enums.VariantType;
 import jakarta.persistence.*;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "ORDER_SIZES")
 public class OrderSize {

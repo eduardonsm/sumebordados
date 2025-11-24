@@ -73,4 +73,10 @@ public class OrderService {
         return new CreateOrderResponseDTO(id);
     }
 
+        @Transactional(readOnly = true)
+        public Order getOrderById(Long id) {
+            return orderRepo.findById(id)
+                    .orElseThrow(() -> new OrderNotFoundException(id));
+        }
+
 }
