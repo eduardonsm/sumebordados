@@ -14,13 +14,13 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Employee {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String nome;
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     @ToString.Exclude
     private String senha;
     @Enumerated(EnumType.STRING)

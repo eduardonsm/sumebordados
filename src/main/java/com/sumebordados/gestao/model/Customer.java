@@ -20,13 +20,13 @@ public class Customer {
         this.telefone = telefone;
         this.endereco = endereco;
     }
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String nome;
-    @Column(nullable = false)
+    @Column(name = "phone", nullable = false)
     private String telefone;
-    @Column(nullable = false)
+    @Column(name = "address", nullable = false)
     private String endereco;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders = new HashSet<>();

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "ORDER_SIZES")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderSize {
