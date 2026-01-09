@@ -1,12 +1,10 @@
-CREATE TYPE role_type AS ENUM ('EMPLOYEE', 'ADMIN');
-CREATE TYPE order_type AS ENUM ('Aguardando Adiantamento','Atrasado', 'Em Produção', 'Cancelado', 'Finalizado', 'Aguardando Arte');
 
 CREATE TABLE EMPLOYEES(
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     username VARCHAR(20) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    role role_type NOT NULL DEFAULT 'EMPLOYEE'
+    role VARCHAR(20) NOT NULL DEFAULT 'EMPLOYEE'
 );
 CREATE TABLE CUSTOMERS(
     id SERIAL PRIMARY KEY,
@@ -30,6 +28,6 @@ CREATE TABLE ORDERS(
     advance_date DATE,
     advance_amount DECIMAL(10,2) DEFAULT 0,
     remaining_amount DECIMAL(10,2) DEFAULT 0,
-    status order_type NOT NULL,
+    status VARCHAR(50) NOT NULL,
     artwork_url TEXT
 );

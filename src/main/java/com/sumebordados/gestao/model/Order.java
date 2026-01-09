@@ -56,7 +56,6 @@ public class Order {
     private Float advance_amount ;
     private Float remaining_amount ;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "order_type")
     private OrderStatus status;
     private String artwork_url;
     @ElementCollection

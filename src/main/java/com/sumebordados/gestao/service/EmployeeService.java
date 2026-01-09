@@ -25,7 +25,7 @@ public class EmployeeService {
 
         Employee saved = employeeRepo.save(employee);
 
-        return new EmployeeResponseDTO(saved.getId(), saved.getNome(), saved.getUsername(), saved.getRole());
+        return new EmployeeResponseDTO(saved.getId(), saved.getUsername(), saved.getSenha(), saved.getRole());
     }
     @Transactional
     public void deleteEmployee(Long id){
@@ -46,7 +46,7 @@ public class EmployeeService {
 
         Employee saved = employeeRepo.save(employee);
 
-        return new EmployeeResponseDTO(saved.getId(), saved.getNome(), saved.getUsername(), saved.getRole());
+        return new EmployeeResponseDTO(saved.getId(), saved.getUsername(), saved.getSenha(), saved.getRole());
     }
 
 }
