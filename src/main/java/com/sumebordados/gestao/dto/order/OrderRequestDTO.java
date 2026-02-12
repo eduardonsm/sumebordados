@@ -5,7 +5,7 @@ import com.sumebordados.gestao.model.enums.OrderStatus;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record CreateOrderRequestDTO(
+public record OrderRequestDTO(
         Long customerId,
         String model,
         String fabric,

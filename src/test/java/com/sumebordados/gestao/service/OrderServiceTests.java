@@ -1,7 +1,7 @@
 package com.sumebordados.gestao.service;
 
-import com.sumebordados.gestao.dto.order.CreateOrderRequestDTO;
-import com.sumebordados.gestao.dto.order.CreateOrderResponseDTO;
+import com.sumebordados.gestao.dto.order.OrderRequestDTO;
+import com.sumebordados.gestao.dto.order.OrderResponseDTO;
 import com.sumebordados.gestao.dto.order.OrderSizeRequestDTO;
 import com.sumebordados.gestao.exception.CustomerNotFoundException;
 import com.sumebordados.gestao.exception.OrderNotFoundException;
@@ -44,7 +44,7 @@ class OrderServiceTests {
     private OrderService orderService;
 
     private Customer customer;
-    private CreateOrderRequestDTO orderRequestDTO;
+    private OrderRequestDTO orderRequestDTO;
 
     @BeforeEach
     void setup() {
@@ -57,7 +57,7 @@ class OrderServiceTests {
         Set<OrderSizeRequestDTO> sizes = new HashSet<>();
         sizes.add(new OrderSizeRequestDTO(BaseSizeType.M, VariantType.NORMAL, 10));
 
-        orderRequestDTO = new CreateOrderRequestDTO(
+        orderRequestDTO = new OrderRequestDTO(
                 1L, // customerId
                 "Modelo Polo",
                 "Piquet",
@@ -94,7 +94,7 @@ class OrderServiceTests {
             when(orderRepo.save(any(Order.class))).thenReturn(savedOrder);
 
             // Act
-            CreateOrderResponseDTO response = orderService.createOrder(orderRequestDTO);
+            OrderResponseDTO response = orderService.createOrder(orderRequestDTO);
 
             // Assert
             assertNotNull(response);

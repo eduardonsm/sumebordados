@@ -1,21 +1,18 @@
 package com.sumebordados.gestao.service;
-import com.sumebordados.gestao.dto.order.CreateOrderRequestDTO;
-import com.sumebordados.gestao.dto.order.CreateOrderResponseDTO;
+import com.sumebordados.gestao.dto.order.OrderRequestDTO;
+import com.sumebordados.gestao.dto.order.OrderResponseDTO;
 import com.sumebordados.gestao.exception.CustomerNotFoundException;
 import com.sumebordados.gestao.exception.OrderNotFoundException;
 import com.sumebordados.gestao.model.Customer;
 import com.sumebordados.gestao.model.Order;
 import com.sumebordados.gestao.model.OrderSize;
 import com.sumebordados.gestao.model.OrderSizeId;
-import com.sumebordados.gestao.model.enums.OrderStatus;
 import com.sumebordados.gestao.repository.CustomerRepository;
 import com.sumebordados.gestao.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +23,7 @@ public class OrderService {
     private final CustomerRepository customerRepo;
 
     @Transactional
-    public CreateOrderResponseDTO createOrder(CreateOrderRequestDTO dto){
+    public OrderResponseDTO createOrder(OrderRequestDTO dto){
 
         Customer customer = customerRepo.findById(dto.customerId())
                 .orElseThrow(() -> new CustomerNotFoundException(dto.customerId()));
@@ -50,7 +47,7 @@ public class OrderService {
         order.setSizes(sizes);
 
         Order saved = orderRepo.save(order);
-        return new CreateOrderResponseDTO(saved.getId());
+        return new OrderResponseDTO(saved.getId());
     }
     @Transactional
     public void deleteOrder(Long id){
@@ -59,7 +56,7 @@ public class OrderService {
         orderRepo.delete(order);
     }
     @Transactional
-    public CreateOrderResponseDTO updateOrder(Long id, CreateOrderRequestDTO dto){
+    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO dto){
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         Customer customer = customerRepo.findById(dto.customerId())
@@ -94,7 +91,7 @@ public class OrderService {
         order.setSizes(sizes);
 
         Order saved = orderRepo.save(order);
-        return new CreateOrderResponseDTO(saved.getId());
+        return new OrderResponseDTO(saved.getId());
     }
 
         @Transactional(readOnly = true)
