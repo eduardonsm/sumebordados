@@ -7,19 +7,22 @@ import com.sumebordados.gestao.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @AllArgsConstructor
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO dto){
+        String encryptedPassword = passwordEncoder.encode(dto.senha());
 
         Employee employee = new Employee(
                 dto.nome(),
                 dto.username(),
-                dto.senha(),
+                encryptedPassword,
                 dto.role()
         );
 
@@ -41,7 +44,7 @@ public class EmployeeService {
 
         employee.setNome(dto.nome());
         employee.setUsername(dto.username());
-        employee.setSenha(dto.senha());
+        employee.setSenha(passwordEncoder.encode(dto.senha()));
         employee.setRole(dto.role());
 
         Employee saved = employeeRepo.save(employee);
