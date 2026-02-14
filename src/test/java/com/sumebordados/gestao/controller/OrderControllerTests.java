@@ -37,8 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @DisplayName("Testes do Controlador de Pedidos")
+@AutoConfigureMockMvc(addFilters = false)
 public class OrderControllerTests {
 
     final String URI_ORDERS = "/orders";

@@ -37,12 +37,4 @@ class SecurityAccessTests {
                         .content(objectMapper.writeValueAsString(novoFuncionario)))
                 .andExpect(status().isForbidden());
     }
-
-    /* Observação: Para testar o "caminho feliz" (acesso permitido com token),
-       seria necessário mockar o TokenService e o EmployeeRepository para que
-       o SecurityFilter valide o token e injete o usuário no contexto.
-       Como isso é complexo em teste de integração puro, geralmente testamos
-       o bloqueio (403) aqui e o fluxo completo nos testes de Controller individuais
-       usando @WithMockUser se necessário.
-    */
 }

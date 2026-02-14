@@ -19,8 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @DisplayName("Testes do Controlador de Funcionários")
+@AutoConfigureMockMvc(addFilters = false)
 public class EmployeeControllerTests {
 
     final String URI_EMPLOYEES = "/employees";

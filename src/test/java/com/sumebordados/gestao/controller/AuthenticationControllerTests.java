@@ -48,7 +48,6 @@ class AuthenticationControllerTests {
         // Arrange
         AuthenticationDTO loginData = new AuthenticationDTO("admin", "123456");
 
-        // Simula o objeto Employee retornado após autenticação
         Employee employeeAutenticado = new Employee("Admin", "admin", "encryptedPass", EmployeeRole.ADMIN);
         Authentication authMock = mock(Authentication.class);
 
@@ -73,7 +72,6 @@ class AuthenticationControllerTests {
         // Arrange
         AuthenticationDTO loginData = new AuthenticationDTO("invalido", "0000");
 
-        // Simula erro no AuthenticationManager
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new org.springframework.security.authentication.BadCredentialsException("Bad credentials"));
 
@@ -81,7 +79,7 @@ class AuthenticationControllerTests {
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginData)))
-                .andExpect(status().isForbidden()) // O Spring Security costuma retornar 401 ou 403 dependendo da config
+                .andExpect(status().isForbidden())
                 .andDo(print());
     }
 }
