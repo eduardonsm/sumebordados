@@ -5,7 +5,7 @@ export default function RegisterEmployee() {
   const [nome, setNome] = useState("");
   const [username, setUsername] = useState("");
   const [senha, setSenha] = useState("");
-  const [role, setRole] = useState("EMPLOYEE");
+  const [role, setRole] = useState("Employee");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function RegisterEmployee() {
       setNome("");
       setUsername("");
       setSenha("");
-      setRole("EMPLOYEE");
+      setRole("Employee");
     } catch (err) {
       if (err.response?.status === 403) {
         setError("Não tem permissão para cadastrar funcionários. Apenas administradores.");
@@ -107,8 +107,8 @@ export default function RegisterEmployee() {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
-                <option value="EMPLOYEE">Funcionário</option>
-                <option value="ADMIN">Administrador</option>
+                <option value="Employee">Funcionário</option>
+                <option value="Admin">Administrador</option>
               </select>
             </div>
             <button
