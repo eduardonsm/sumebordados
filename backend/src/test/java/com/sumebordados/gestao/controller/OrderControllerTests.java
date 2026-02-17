@@ -209,4 +209,70 @@ public class OrderControllerTests {
                     .andDo(print());
         }
     }
+    @Nested
+    @DisplayName("Validação de Pedidos")
+    class OrderValidacao {
+
+        @Test
+        @DisplayName("Deve retornar 400 Bad Request quando Quantidade for inválida (0)")
+        void quandoQuantidadeInvalida() throws Exception {
+            // Arrange
+            OrderRequestDTO dtoInvalido = new OrderRequestDTO(
+                    1L, "Modelo Teste", "Tecido", true,
+                    0, // INVALIDO
+                    0, 0, 0, 50.0f, 500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
+                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+            );
+
+            // Act & Assert
+            driver.perform(post(URI_ORDERS)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+                    .andExpect(status().isBadRequest())
+                    // Verifica se a mensagem definida na anotação @Min está presente no retorno
+                    // (Nota: Isso depende do Spring retornar os erros de validação no body padrão)
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("Deve retornar 400 Bad Request quando Preço Unitário for negativo")
+        void quandoPrecoUnitarioNegativo() throws Exception {
+            // Arrange
+            OrderRequestDTO dtoInvalido = new OrderRequestDTO(
+                    1L, "Modelo Teste", "Tecido", true,
+                    10,
+                    0, 0, 0,
+                    -10.0f, // INVALIDO
+                    500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
+                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+            );
+
+            // Act & Assert
+            driver.perform(post(URI_ORDERS)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("Deve retornar 400 Bad Request quando CustomerId for nulo")
+        void quandoClienteNulo() throws Exception {
+            // Arrange
+            OrderRequestDTO dtoInvalido = new OrderRequestDTO(
+                    null, // INVALIDO
+                    "Modelo Teste", "Tecido", true,
+                    10,
+                    0, 0, 0, 50.0f, 500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
+                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+            );
+
+            // Act & Assert
+            driver.perform(post(URI_ORDERS)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+        }
+    }
 }

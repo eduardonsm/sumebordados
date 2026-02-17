@@ -4,6 +4,7 @@ import com.sumebordados.gestao.dto.order.OrderRequestDTO;
 import com.sumebordados.gestao.dto.order.OrderResponseDTO;
 import com.sumebordados.gestao.model.Order;
 import com.sumebordados.gestao.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO dto) {
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody @Valid OrderRequestDTO dto) {
         OrderResponseDTO created = orderService.createOrder(dto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

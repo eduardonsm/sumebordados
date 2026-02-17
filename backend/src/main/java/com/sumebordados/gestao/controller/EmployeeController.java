@@ -3,6 +3,7 @@ package com.sumebordados.gestao.controller;
 import com.sumebordados.gestao.dto.employee.EmployeeRequestDTO;
 import com.sumebordados.gestao.dto.employee.EmployeeResponseDTO;
 import com.sumebordados.gestao.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeResponseDTO> createEmployee(
-            @RequestBody EmployeeRequestDTO dto) {
+            @Valid @RequestBody EmployeeRequestDTO dto) {
 
         EmployeeResponseDTO created = employeeService.createEmployee(dto);
 

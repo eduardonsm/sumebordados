@@ -8,7 +8,7 @@ export default function RegisterEmployee() {
   const [nome, setNome] = useState("");
   const [username, setUsername] = useState("");
   const [senha, setSenha] = useState("");
-  const [role, setRole] = useState<EmployeeRole>("EMPLOYEE");
+  const [role, setRole] = useState<EmployeeRole>("Employee");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);

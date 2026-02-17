@@ -26,7 +26,7 @@ public class CustomerController {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(created.id()) // supondo que CustomerResponseDTO é um record com método id()
+                .buildAndExpand(created.id())
                 .toUri();
 
         return ResponseEntity.created(location).body(created);
