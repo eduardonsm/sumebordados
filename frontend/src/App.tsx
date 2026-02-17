@@ -17,8 +17,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/register-employee" element={<RegisterEmployee />} />
+        <Route path="/pedidos" element={<OrdersPage />} />
+        <Route path="/cadastrar-funcionario" element={<RegisterEmployee />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

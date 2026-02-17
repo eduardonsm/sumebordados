@@ -50,7 +50,7 @@ export default function Login() {
             )}
             <div className="mb-3">
               <label htmlFor="username" className="form-label">
-                Utilizador
+                Username
               </label>
               <input
                 type="text"
@@ -64,7 +64,7 @@ export default function Login() {
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="form-label">
-                Palavra-passe
+                Password
               </label>
               <input
                 type="password"
