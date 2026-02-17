@@ -1,22 +1,55 @@
-# sumebordados
+# SumeBordados
 
-## Como subir backend
-Primeiro, na raiz do projeto "/sumebordados" faça:
-<br>
-` cd backend/`<br>
-`docker compose up -d`
+Projeto fullstack composto por uma API Spring Boot (Backend) e uma interface React (Frontend).
 
-vai subir o postgres do projeto
+## 📋 Pré-requisitos
 
-depois (se voce usa linux) `mvn spring-boot:run`<br>
-vai subir o backend spring do projeto
-## Como subir frontend
-Primeiro faça:
-<br>
-` cd frontend/`<br>
-`npm install`
+Certifique-se de ter instalado em sua máquina:
 
-vai baixar todas as dependencias do front
+Java JDK (17 ou superior) <br>
+Maven <br>
+Docker <br>
+Node.js <br>
+##  🚀 Backend (API)
 
-depois `npm run dev`<br>
-vai subir o frontend react
+O backend utiliza PostgreSQL (via Docker) e Spring Boot.
+
+1. Subir o Banco de Dados
+
+Na raiz do projeto, acesse a pasta backend e inicie o container do banco:
+```
+cd backend
+docker compose up -d
+```
+2. Executar a Aplicação
+
+Ainda na pasta backend, inicie o servidor Spring Boot:
+
+Linux / Mac / Windows (PowerShell):
+```
+mvn spring-boot:run
+```
+
+
+Nota: Certifique-se de que o container do banco de dados já está rodando antes de iniciar o Spring Boot.
+
+## 💻 Frontend (Web)
+
+O frontend é desenvolvido em React. Abra um novo terminal para manter o backend rodando.
+
+1. Instalar Dependências
+
+Na raiz do projeto, acesse a pasta frontend e baixe os pacotes necessários:
+```
+cd frontend
+npm install
+```
+
+2. Rodar o Projeto
+
+Inicie o servidor de desenvolvimento:
+```
+npm run dev
+```
+
+O terminal exibirá o link de acesso local (geralmente http://localhost:5173).
