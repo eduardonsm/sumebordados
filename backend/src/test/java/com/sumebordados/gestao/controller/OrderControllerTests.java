@@ -21,8 +21,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,7 +78,6 @@ public class OrderControllerTests {
                 LocalDate.now(),
                 250.0f, 250.0f,
                 OrderStatus.AGUARDANDO_ARTE,
-                "http://arte.url",
                 colors,
                 sizes
         );
@@ -98,12 +99,12 @@ public class OrderControllerTests {
         @DisplayName("Deve criar pedido com sucesso e retornar 201 Created")
         void quandoCriarPedidoValido() throws Exception {
             // Arrange
-            when(orderService.createOrder(any(OrderRequestDTO.class))).thenReturn(orderResponseDTO);
+            when(orderService.createOrder(any(OrderRequestDTO.class), any())).thenReturn(orderResponseDTO);
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(orderRequestDTO).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(post(URI_ORDERS)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(orderRequestDTO)))
+            driver.perform(multipart(URI_ORDERS).part(orderPart))
                     .andExpect(status().isCreated())
                     .andExpect(header().exists("Location"))
                     .andExpect(jsonPath("$.id").value(100L))
@@ -154,12 +155,15 @@ public class OrderControllerTests {
         @DisplayName("Deve atualizar pedido com sucesso")
         void quandoAtualizarPedidoValido() throws Exception {
             // Arrange
-            when(orderService.updateOrder(eq(100L), any(OrderRequestDTO.class))).thenReturn(orderResponseDTO);
+            when(orderService.updateOrder(eq(100L), any(OrderRequestDTO.class), any())).thenReturn(orderResponseDTO);
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(orderRequestDTO).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(put(URI_ORDERS + "/{id}", 100L)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(orderRequestDTO)))
+            driver.perform(multipart(URI_ORDERS + "/{id}", 100L).part(orderPart).with(request -> {
+                request.setMethod("PUT");
+                return request;
+            }))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(100L))
                     .andDo(print());
@@ -169,13 +173,16 @@ public class OrderControllerTests {
         @DisplayName("Deve retornar 404 ao tentar atualizar pedido inexistente")
         void quandoAtualizarPedidoInexistente() throws Exception {
             // Arrange
-            when(orderService.updateOrder(eq(999L), any(OrderRequestDTO.class)))
+            when(orderService.updateOrder(eq(999L), any(OrderRequestDTO.class), any()))
                     .thenThrow(new OrderNotFoundException(999L));
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(orderRequestDTO).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(put(URI_ORDERS + "/{id}", 999L)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(orderRequestDTO)))
+            driver.perform(multipart(URI_ORDERS + "/{id}", 999L).part(orderPart).with(request -> {
+                request.setMethod("PUT");
+                return request;
+            }))
                     .andExpect(status().isNotFound())
                     .andDo(print());
         }
@@ -221,16 +228,14 @@ public class OrderControllerTests {
                     1L, "Modelo Teste", "Tecido", true,
                     0, // INVALIDO
                     0, 0, 0, 50.0f, 500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
-                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+                    OrderStatus.AGUARDANDO_ARTE, Collections.emptySet(), Collections.emptySet()
             );
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(dtoInvalido).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(post(URI_ORDERS)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+            driver.perform(multipart(URI_ORDERS).part(orderPart))
                     .andExpect(status().isBadRequest())
-                    // Verifica se a mensagem definida na anotação @Min está presente no retorno
-                    // (Nota: Isso depende do Spring retornar os erros de validação no body padrão)
                     .andDo(print());
         }
 
@@ -244,13 +249,13 @@ public class OrderControllerTests {
                     0, 0, 0,
                     -10.0f, // INVALIDO
                     500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
-                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+                    OrderStatus.AGUARDANDO_ARTE, Collections.emptySet(), Collections.emptySet()
             );
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(dtoInvalido).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(post(URI_ORDERS)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+            driver.perform(multipart(URI_ORDERS).part(orderPart))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -264,13 +269,13 @@ public class OrderControllerTests {
                     "Modelo Teste", "Tecido", true,
                     10,
                     0, 0, 0, 50.0f, 500.0f, LocalDate.now(), LocalDate.now(), 250.0f, 250.0f,
-                    OrderStatus.AGUARDANDO_ARTE, "url", Collections.emptySet(), Collections.emptySet()
+                    OrderStatus.AGUARDANDO_ARTE, Collections.emptySet(), Collections.emptySet()
             );
+            MockPart orderPart = new MockPart("order", objectMapper.writeValueAsString(dtoInvalido).getBytes(StandardCharsets.UTF_8));
+            orderPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
             // Act & Assert
-            driver.perform(post(URI_ORDERS)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dtoInvalido)))
+            driver.perform(multipart(URI_ORDERS).part(orderPart))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }

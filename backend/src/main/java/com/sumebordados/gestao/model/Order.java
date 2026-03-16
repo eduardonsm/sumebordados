@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.management.ConstructorParameters;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Entity(name = "ORDERS")
 public class Order {
 
-    public Order(Customer customer, String model, String fabric, boolean has_cut, Integer quantity, Integer chest_customization, Integer back_customization, Integer sleeve_customization, Float unit_price, Float total_price, LocalDate delivery_date, LocalDate advance_date, Float advance_amount, Float remaining_amount, OrderStatus status, String artwork_url, Set<String> colors) {
+    public Order(Customer customer, String model, String fabric, boolean has_cut, Integer quantity, Integer chest_customization, Integer back_customization, Integer sleeve_customization, Float unit_price, Float total_price, LocalDate delivery_date, LocalDate advance_date, Float advance_amount, Float remaining_amount, OrderStatus status, byte[] artwork, Set<String> colors) {
         this.customer = customer;
         this.model = model;
         this.fabric = fabric;
@@ -33,7 +32,7 @@ public class Order {
         this.advance_amount = advance_amount;
         this.remaining_amount = remaining_amount;
         this.status = status;
-        this.artwork_url = artwork_url;
+        this.artwork = artwork;
         this.colors = colors;
     }
 
@@ -57,7 +56,9 @@ public class Order {
     private Float remaining_amount ;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    private String artwork_url;
+    @Lob
+    @Column(name = "artwork")
+    private byte[] artwork;
     @ElementCollection
     @CollectionTable(
             name = "ORDER_COLORS", // Nome da tabela que armazenará a coleção

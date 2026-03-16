@@ -73,7 +73,6 @@ class OrderServiceTests {
                 250.0f,
                 250.0f,
                 OrderStatus.AGUARDANDO_ARTE,
-                "http://img.url",
                 colors,
                 sizes
         );
@@ -94,7 +93,7 @@ class OrderServiceTests {
             when(orderRepo.save(any(Order.class))).thenReturn(savedOrder);
 
             // Act
-            OrderResponseDTO response = orderService.createOrder(orderRequestDTO);
+            OrderResponseDTO response = orderService.createOrder(orderRequestDTO, null);
 
             // Assert
             assertNotNull(response);
@@ -110,7 +109,7 @@ class OrderServiceTests {
 
             // Act & Assert
             assertThrows(CustomerNotFoundException.class, () -> {
-                orderService.createOrder(orderRequestDTO);
+                orderService.createOrder(orderRequestDTO, null);
             });
             verify(orderRepo, never()).save(any());
         }
