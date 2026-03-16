@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import java.net.URI;
 
 @AllArgsConstructor
@@ -54,5 +56,19 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/artwork")
+    public ResponseEntity<byte[]> getArtwork(@PathVariable Long id) {
+        byte[] artwork = orderService.getOrderArtwork(id);
+
+        if (artwork == null || artwork.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG); 
+
+        return new ResponseEntity<>(artwork, headers, HttpStatus.OK);
     }
 }

@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.sql.Types;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
 
 @Data
 @NoArgsConstructor
@@ -38,10 +42,16 @@ public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private String model;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private String fabric;
     private boolean has_cut;
     private Integer quantity;
@@ -56,7 +66,7 @@ public class Order {
     private Float remaining_amount ;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    @Lob
+    @JdbcTypeCode(Types.BINARY)
     @Column(name = "artwork")
     private byte[] artwork;
     @ElementCollection
@@ -64,7 +74,9 @@ public class Order {
             name = "ORDER_COLORS", // Nome da tabela que armazenará a coleção
             joinColumns = @JoinColumn(name = "order_id") // Coluna que faz a ligação com a tabela ORDERS
     )
-    @Column(name = "color", nullable = false) // Nome da coluna que armazenará as cores
+    @Column(name = "color", nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<String> colors = new HashSet<>(); // Não permite cor duplicada
 
     @OneToMany(
@@ -72,6 +84,8 @@ public class Order {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<OrderSize> sizes = new HashSet<>();
 
 
