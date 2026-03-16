@@ -116,4 +116,13 @@ public class OrderService {
             throw new RuntimeException("Falha ao ler arquivo da arte: " + e.getMessage(), e);
         }
     }
+    @Transactional(readOnly = true)
+    public byte[] getOrderArtwork(Long id) {
+        Order order = orderRepo.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        if (order.getArtwork() == null || order.getArtwork().length == 0) {
+            return null;
+        }
+        return order.getArtwork();
+    }
 }
