@@ -12,7 +12,9 @@ import com.sumebordados.gestao.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,17 +25,18 @@ public class OrderService {
     private final CustomerRepository customerRepo;
 
     @Transactional
-    public OrderResponseDTO createOrder(OrderRequestDTO dto){
-
+    public OrderResponseDTO createOrder(OrderRequestDTO dto, MultipartFile artwork) {
         Customer customer = customerRepo.findById(dto.customerId())
                 .orElseThrow(() -> new CustomerNotFoundException(dto.customerId()));
+
+        byte[] artworkBytes = toArtworkBytes(artwork);
 
         Order order = new Order(
                 customer, dto.model(), dto.fabric(), dto.has_cut(),
                 dto.quantity(), dto.chest_customization(), dto.back_customization(),
                 dto.sleeve_customization(), dto.unit_price(), dto.total_price(),
                 dto.delivery_date(), dto.advance_date(), dto.advance_amount(), dto.remaining_amount(),
-                dto.status(), dto.artwork_url(), dto.colors()
+                dto.status(), artworkBytes, dto.colors()
         );
         Set<OrderSize> sizes = dto.sizes().stream()
                 .map(sizeDto -> {
@@ -56,7 +59,7 @@ public class OrderService {
         orderRepo.delete(order);
     }
     @Transactional
-    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO dto){
+    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO dto, MultipartFile artwork) {
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         Customer customer = customerRepo.findById(dto.customerId())
@@ -77,7 +80,10 @@ public class OrderService {
         order.setAdvance_amount(dto.advance_amount());
         order.setRemaining_amount(dto.remaining_amount());
         order.setStatus(dto.status());
-        order.setArtwork_url(dto.artwork_url());
+        byte[] artworkBytes = toArtworkBytes(artwork);
+        if (artworkBytes != null) {
+            order.setArtwork(artworkBytes);
+        }
         order.setColors(dto.colors());
         order.getSizes().clear();
         Set<OrderSize> sizes = dto.sizes().stream()
@@ -94,10 +100,29 @@ public class OrderService {
         return new OrderResponseDTO(saved.getId());
     }
 
-        @Transactional(readOnly = true)
-        public Order getOrderById(Long id) {
-            return orderRepo.findById(id)
-                    .orElseThrow(() -> new OrderNotFoundException(id));
-        }
+    @Transactional(readOnly = true)
+    public Order getOrderById(Long id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+    }
 
+    private byte[] toArtworkBytes(MultipartFile artwork) {
+        if (artwork == null || artwork.isEmpty()) {
+            return null;
+        }
+        try {
+            return artwork.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao ler arquivo da arte: " + e.getMessage(), e);
+        }
+    }
+    @Transactional(readOnly = true)
+    public byte[] getOrderArtwork(Long id) {
+        Order order = orderRepo.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        if (order.getArtwork() == null || order.getArtwork().length == 0) {
+            return null;
+        }
+        return order.getArtwork();
+    }
 }

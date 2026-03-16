@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/orders/*/artwork").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN") // Apenas Admin cria usuarios
                         .requestMatchers(HttpMethod.POST, "/employees").hasRole("ADMIN")
                         .anyRequest().authenticated()

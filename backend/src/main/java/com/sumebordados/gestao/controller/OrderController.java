@@ -8,8 +8,11 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import java.net.URI;
 
 @AllArgsConstructor
@@ -19,9 +22,11 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody @Valid OrderRequestDTO dto) {
-        OrderResponseDTO created = orderService.createOrder(dto);
+    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<OrderResponseDTO> createOrder(
+            @RequestPart("order") @Valid OrderRequestDTO dto,
+            @RequestPart(value = "artwork", required = false) MultipartFile artwork) {
+        OrderResponseDTO created = orderService.createOrder(dto, artwork);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -37,12 +42,13 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<OrderResponseDTO> updateOrder(
             @PathVariable Long id,
-            @RequestBody OrderRequestDTO dto) {
+            @RequestPart("order") @Valid OrderRequestDTO dto,
+            @RequestPart(value = "artwork", required = false) MultipartFile artwork) {
 
-        OrderResponseDTO updated = orderService.updateOrder(id, dto);
+        OrderResponseDTO updated = orderService.updateOrder(id, dto, artwork);
         return ResponseEntity.ok(updated);
     }
 
@@ -50,5 +56,19 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/artwork")
+    public ResponseEntity<byte[]> getArtwork(@PathVariable Long id) {
+        byte[] artwork = orderService.getOrderArtwork(id);
+
+        if (artwork == null || artwork.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG); 
+
+        return new ResponseEntity<>(artwork, headers, HttpStatus.OK);
     }
 }
