@@ -5,15 +5,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import RegisterEmployee from "./pages/RegisterEmployee";
 import CreateOrder from "./pages/CreateOrder";
-
-function OrdersPage() {
-  return (
-    <div className="container py-5">
-      <h1>Encomendas</h1>
-      <p>Página em construção.</p>
-    </div>
-  );
-}
+import OrdersPage from "./pages/Orders";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   if (!localStorage.getItem("token")) {
@@ -43,9 +35,21 @@ export default function App() {
           }
         />
         <Route path="/login" element={<Login />} />
-        <Route path="/pedidos" element={<OrdersPage />} />
-        <Route path="/pedidos/novo" element={<CreateOrder />} />
-        <Route path="/cadastrar-funcionario" element={<RegisterEmployee />} />
+        <Route path="/pedidos" element={
+          <ProtectedRoute>
+            <OrdersPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/pedidos/novo" element={
+          <ProtectedRoute>
+            <CreateOrder />
+          </ProtectedRoute>
+        } />
+        <Route path="/cadastrar-funcionario" element={
+          <ProtectedRoute>
+            <RegisterEmployee />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
