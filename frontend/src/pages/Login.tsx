@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { AxiosError } from "axios";
 
@@ -14,6 +14,10 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  if (localStorage.getItem("token")) {
+    return <Navigate to="/" replace />;
+  }
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -25,7 +29,7 @@ export default function Login() {
         password,
       });
       localStorage.setItem("token", data.token);
-      navigate("/orders");
+      navigate("/home");
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       setError(
